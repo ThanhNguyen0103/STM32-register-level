@@ -19,8 +19,18 @@
 #include <stdint.h>
 #include "stm32f1xx.h"
 
-int main(void)
-{
-    /* Loop forever */
-	for(;;);
+int main(void) {
+
+	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN; // peripheral clock enable register
+
+	//  Output mode, max speed 10 MHz.  MODE13 = 01 ,CNF13 = 00
+	GPIOC->CRH &= ~(0xF << 20);
+	GPIOC->CRH |= (1 << 20);
+
+	while (1) {
+
+		GPIOC->BSRR = (1 << 29);  // pc13 active low
+
+	}
+
 }
