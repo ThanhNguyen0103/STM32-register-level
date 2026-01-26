@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stm32f103xb.h"
+#include <string.h>
 
 /* Private function prototypes -----------------------------------------------*/
 void UART_Send_Char(char c);
@@ -47,23 +49,27 @@ void UART_Read_String(char *buf, int len) {
 
     buf[i] = USART1->DR & 0xFF;
 
-    if (buf[i] == '\r' || buf[i] == '\n')
+    if (buf[i] == '9' || buf[i] == '\n')
       break;
 
     i++;
   }
   buf[i] = '\0';
-
 }
-
+char output[9];
+char send = 'A';
 /* ================= MAIN ================= */;
 int main(void) {
 
   //	APB2 peripheral clock enable register (RCC_APB2ENR)
   RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;   // port A
+  RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;   // port C
   RCC->APB2ENR |= RCC_APB2ENR_USART1EN; // uart 1
   RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
   //	Port configuration register high (GPIOx_CRH) (x=A..G)
+
+  GPIOC->CRH &= ~(0xF << 20); // output pc13
+  GPIOC->CRH |= (0x1 << 20);
 
   GPIOA->CRH &= ~(0xF << 4); // output pa9
   GPIOA->CRH |= (0x9 << 4);
@@ -84,9 +90,15 @@ int main(void) {
 
   USART1->BRR = (52 << 4) | 1;
   USART1->CR1 |= USART_CR1_UE;
-  char output[8];
+  USART1->CR1 |= USART_CR1_RXNEIE; // Enable RX interrupt
+
+  //  Configure NVIC
+  NVIC_EnableIRQ(USART1_IRQn);
+
   while (1) {
-    UART_Read_String(output, 9);
-    UART_Send_String(output);
+    UART_Send_Char(send);
+    for (volatile int i = 0; i < 100000; i++) {
+    }
   }
 }
+void USART1_IRQHandler(void) { send = USART1->DR & 0xFF; }
