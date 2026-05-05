@@ -1,5 +1,6 @@
 #include "spi.h"
 #include "register.h"
+#include <stdint.h>
 
 void SPI1_Init(void) {
   // Enable clock
@@ -7,6 +8,8 @@ void SPI1_Init(void) {
   RCC->APB2ENR |= (1 << 0);  // AFIO clock
   RCC->APB2ENR |= (1 << 2);  // GPIOA
 
+  GPIOA->CRL &= ~(0xF << 24); // Clear PA6
+  GPIOA->CRL |= (0x4 << 24);  // Set PA6 as Input Floating
   // PA5 (SCK), PA7 (MOSI) -> AF push-pull
   GPIOA->CRL &= ~((0xF << 20) | (0xF << 28));
   GPIOA->CRL |= ((0xB << 20) | (0xB << 28));
@@ -19,17 +22,21 @@ void SPI1_Init(void) {
   SPI1->CR1 = 0;
 
   SPI1->CR1 |= (1 << 2);            // Master
-  SPI1->CR1 |= (1 << 3);            // Baud rate /4
+  SPI1->CR1 |= (0x2 << 3);          // Baud rate /4
   SPI1->CR1 |= (1 << 9) | (1 << 8); // SSM, SSI
 
-  // CPOL = 0, CPHA = 0 (Mode 0)
-
   SPI1->CR1 |= (1 << 6); // Enable SPI
+  CS_HIGH();
 }
-void SPI_Send(uint8_t data) {
+uint8_t SPI_TxRx(uint8_t data) {
+
   while (!(SPI1->SR & (1 << 1)))
-    ; // TXE
+    ; // TX empty
   SPI1->DR = data;
-  while (SPI1->SR & (1 << 7))
-    ; // BSY
+  while ((SPI1->SR & (1 << 7)))
+    ;
+
+  while (!(SPI1->SR & (1 << 0)))
+    ; // RX not empty
+  return SPI1->DR;
 }

@@ -19,20 +19,19 @@
 
 #include "spi.h"
 #include "ssd1360.h"
+#include "w25q128.h"
 #include <stdint.h>
-unsigned char arr[18] = "NGUYEN NGOC THANH";
+
 int main(void) {
-
+  uint8_t data[6] = "HELLO";
+  uint8_t buffer[6];
+  uint16_t len = 6;
+  
   SPI1_Init();
-  OLED_Init();
-
-  OLED_SendCommand(0xB0);
-  OLED_SendCommand(0x00);
-  OLED_SendCommand(0x10);
-
+  uint32_t id = W25Q128_ReadID();
+  // W25Q_EraseSector(0x000000);
+  // W25Q_Write(0x000000, data, len);
+  // W25Q_Read(0x000000, buffer, len);
   while (1) {
-    OLED_WriteString(arr);
-    for (;;)
-      ;
   }
 }

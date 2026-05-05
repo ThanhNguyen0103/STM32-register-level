@@ -39,12 +39,14 @@ set(cpu_PARAMS
     # -mthumb
     # -mcpu, -mfloat, -mfloat-abi, ...
 )
-
 # Sources
 set(sources_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/spi.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/w25q128.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/ssd1360.c
+    
+
 )
 
 # Include directories for all compilers
@@ -91,7 +93,8 @@ link_directories(${CMAKE_PROJECT_NAME} ${link_DIRS})
 add_executable(${CMAKE_PROJECT_NAME})
 
 # Add sources to executable
-target_sources(${CMAKE_PROJECT_NAME} PUBLIC ${sources_SRCS})
+target_sources(${CMAKE_PROJECT_NAME} PUBLIC ${sources_SRCS}
+ )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE

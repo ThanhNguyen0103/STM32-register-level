@@ -1,15 +1,6 @@
 #include "ssd1360.h"
-#include "register.h"
 #include "spi.h"
 
-#define CS_LOW() (GPIOA->ODR &= ~(1 << 4))
-#define CS_HIGH() (GPIOA->ODR |= (1 << 4))
-
-#define DC_CMD() (GPIOA->ODR &= ~(1 << 2))
-#define DC_DATA() (GPIOA->ODR |= (1 << 2))
-
-#define RES_LOW() (GPIOA->ODR &= ~(1 << 3))
-#define RES_HIGH() (GPIOA->ODR |= (1 << 3))
 void OLED_Reset(void) {
   RES_LOW();
 
@@ -22,13 +13,13 @@ void OLED_Reset(void) {
 void OLED_SendCommand(uint8_t cmd) {
   CS_LOW();
   DC_CMD();
-  SPI_Send(cmd);
+  SPI_TxRx(cmd);
   CS_HIGH();
 }
 void OLED_SendData(uint8_t data) {
   CS_LOW();
   DC_DATA();
-  SPI_Send(data);
+  SPI_TxRx(data);
   CS_HIGH();
 }
 void OLED_Init(void) {
