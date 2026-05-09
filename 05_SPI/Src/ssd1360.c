@@ -13,13 +13,13 @@ void OLED_Reset(void) {
 void OLED_SendCommand(uint8_t cmd) {
   CS_LOW();
   DC_CMD();
-  SPI_TxRx(cmd);
+  SPI_Tx(cmd);
   CS_HIGH();
 }
 void OLED_SendData(uint8_t data) {
   CS_LOW();
   DC_DATA();
-  SPI_TxRx(data);
+  SPI_Tx(data);
   CS_HIGH();
 }
 void OLED_Init(void) {

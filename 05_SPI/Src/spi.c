@@ -26,16 +26,18 @@ void SPI1_Init(void) {
   SPI1->CR1 |= (1 << 9) | (1 << 8); // SSM, SSI
 
   SPI1->CR1 |= (1 << 6); // Enable SPI
+  SPI1->CR2 |= (1 << 0)|(1 << 1); // DMA enable
+ 
   CS_HIGH();
 }
-uint8_t SPI_TxRx(uint8_t data) {
-
+void SPI_Tx(uint8_t data) {
   while (!(SPI1->SR & (1 << 1)))
     ; // TX empty
   SPI1->DR = data;
   while ((SPI1->SR & (1 << 7)))
     ;
-
+}
+uint8_t SPI_Rx(void) {
   while (!(SPI1->SR & (1 << 0)))
     ; // RX not empty
   return SPI1->DR;

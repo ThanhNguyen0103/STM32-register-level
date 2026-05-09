@@ -11,4 +11,5 @@
 #define RES_LOW() (GPIOA->ODR &= ~(1 << 3))
 #define RES_HIGH() (GPIOA->ODR |= (1 << 3))
 void SPI1_Init(void);
-uint8_t SPI_TxRx(uint8_t data);
+uint8_t SPI_Rx(void);
+void SPI_Tx(uint8_t data) ;

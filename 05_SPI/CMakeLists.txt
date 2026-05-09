@@ -45,7 +45,7 @@ set(sources_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/spi.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/w25q128.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/ssd1360.c
-    
+     ${CMAKE_CURRENT_SOURCE_DIR}/Src/dma.c
 
 )
 

@@ -71,6 +71,22 @@ typedef struct {
   volatile uint32_t I2SCFGR;
 } SPI_TypeDef;
 
+/* DMA */
+typedef struct
+{
+  volatile uint32_t CCR;
+  volatile uint32_t CNDTR;
+  volatile uint32_t CPAR;
+  volatile uint32_t CMAR;
+} DMA_Channel_TypeDef;
+
+typedef struct
+{
+  volatile uint32_t ISR;
+  volatile uint32_t IFCR;
+} DMA_TypeDef;
+
+
 /*=================================*/
 
 /* RCC */
@@ -87,6 +103,24 @@ typedef struct {
 #define I2C1 ((I2C_TypeDef *)0x40005400UL)
 /* SPI */
 #define SPI1 ((SPI_TypeDef *)0x40013000UL)
+/* DMA */
+#define DMA1_BASE             0x40020000UL
+#define DMA1_Channel1_BASE    (DMA1_BASE + 0x00000008UL)
+#define DMA1_Channel2_BASE    (DMA1_BASE + 0x0000001CUL)
+#define DMA1_Channel3_BASE    (DMA1_BASE + 0x00000030UL)
+#define DMA1_Channel4_BASE    (DMA1_BASE + 0x00000044UL)
+#define DMA1_Channel5_BASE    (DMA1_BASE + 0x00000058UL)
+#define DMA1_Channel6_BASE    (DMA1_BASE + 0x0000006CUL)
+#define DMA1_Channel7_BASE    (DMA1_BASE + 0x00000080UL)
+
+#define DMA1                ((DMA_TypeDef *)DMA1_BASE)
+#define DMA1_Channel1       ((DMA_Channel_TypeDef *)DMA1_Channel1_BASE)
+#define DMA1_Channel2       ((DMA_Channel_TypeDef *)DMA1_Channel2_BASE)
+#define DMA1_Channel3       ((DMA_Channel_TypeDef *)DMA1_Channel3_BASE)
+#define DMA1_Channel4       ((DMA_Channel_TypeDef *)DMA1_Channel4_BASE)
+#define DMA1_Channel5       ((DMA_Channel_TypeDef *)DMA1_Channel5_BASE)
+#define DMA1_Channel6       ((DMA_Channel_TypeDef *)DMA1_Channel6_BASE)
+#define DMA1_Channel7       ((DMA_Channel_TypeDef *)DMA1_Channel7_BASE)
 
 /*===================*/
 #define NVIC_ISER1 (*(volatile unsigned int *)0xE000E104)
